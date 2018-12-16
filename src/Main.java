@@ -15,6 +15,7 @@ public class Main {
         ArrayList<Urllist> urllist = new ArrayList<>();
         ArrayList<Statlist> statlist = new ArrayList<>();
         ArrayList<String> alstr = new ArrayList<>();
+        ArrayList<Future> futures = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String date = sdf.format(new java.util.Date());
 
@@ -47,16 +48,25 @@ public class Main {
 //        service.submit(new SelThread("seltype" + 1, 0, date, urllist, con));
 
         while(!urllist.isEmpty()){
-            service.submit(new UrlThread("urltype", y, urllist, statlist, alstr));
+            futures.add(service.submit(new UrlThread("urltype", y, urllist, statlist, alstr)));
 //            urllist.remove(0);
         }
+        System.out.println(futures.size());
 
 //        for(int i = 0; i < 10; i++) {
 //            if (!urllist.isEmpty()) {
 //                new UrlThread("urltype" + i, i, urllist, statlist);
 //            }
 //        }
-        Thread.sleep(6000);
+//        Thread.sleep(6000);
+        boolean fin = false;
+        while (!fin) {
+//            System.out.println(fin);
+            fin = true;
+            for (int i = 0; i < futures.size(); i++) {
+                fin = fin && futures.get(i).isDone();
+            }
+        }
         System.out.println(urllist.size());
         System.out.println(statlist.size() + ", " + alstr.size());
 //        for (int i = 0; i < statlist.size(); i++){

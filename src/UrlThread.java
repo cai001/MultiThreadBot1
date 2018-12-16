@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class UrlThread implements Runnable{
-    Thread thread;
+    public Thread thread;
     private String name;
     private String url;
     private int id;
