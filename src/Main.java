@@ -51,7 +51,7 @@ public class Main {
             futures.add(service.submit(new UrlThread("urltype", y, urllist, statlist, alstr)));
 //            urllist.remove(0);
         }
-        System.out.println(futures.size());
+//        System.out.println(futures.size());
 
 //        for(int i = 0; i < 10; i++) {
 //            if (!urllist.isEmpty()) {
@@ -67,15 +67,31 @@ public class Main {
                 fin = fin && futures.get(i).isDone();
             }
         }
+//        System.out.println(futures.size());
+        service.shutdown();
+//        System.out.println(futures.size());
         System.out.println(urllist.size());
         System.out.println(statlist.size() + ", " + alstr.size());
 //        for (int i = 0; i < statlist.size(); i++){
 //            System.out.println("id = " + statlist.get(i).id + ", stat = " + statlist.get(i).stat);
 //        }
+        Connection coni = DriverManager.getConnection(urldb, login, password);
         while (!statlist.isEmpty()){
-            service.submit(new UpdThread("updtype", z, date, statlist));
+            int stat = statlist.get(0).stat;
+            int id = statlist.get(0).id;
+            statlist.remove(0);
+
+            Statement sti = coni.createStatement();
+            sti.executeUpdate("UPDATE urllistg SET date = '" + date + "', status = " + stat + " WHERE id = " + id);
+            sti.close();
+
         }
-        Thread.sleep(1000);
+        coni.close();
+//        while (!statlist.isEmpty()){
+//            service.submit(new UpdThread("updtype", z, date, statlist));
+//        }
+
+//        Thread.sleep(1000);
         System.out.println(urllist.size());
         System.out.println(statlist.size());
 //        for (int i = 0; i < c; i++) {
