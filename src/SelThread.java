@@ -30,7 +30,7 @@ public class SelThread extends Thread{
             Connection con = DriverManager.getConnection(urldb, login, password);
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM urllist.urllistg WHERE date < '" + date + "' or date is null");
-            sc.setStat();
+            sc.setStat(200,89);
             st.close();
         }catch(Exception e){
             System.out.println(e);

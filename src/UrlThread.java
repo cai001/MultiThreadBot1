@@ -8,14 +8,16 @@ public class UrlThread extends Thread{
     private String url;
     private int id;
     private int num;
-    private StatCont sc;
-    UrlThread(String name, int num, String url, int id, StatCont sc){
+    private ArrayList<Urllist> urllist;
+    private ArrayList<Statlist> statlist;
+    UrlThread(String name, int num, ArrayList<Urllist> urllist, ArrayList<Statlist> statlist){
         super(name);
         this.name = name;
-        this.url = url;
-        this.id = id;
+        this.url = urllist.get(0).url;
+        this.id = urllist.get(0).id;
         this.num = num;
-        this.sc = sc;
+        this.statlist = statlist;
+        urllist.remove(0);
         start();
     }
 //    private String urldb = "jdbc:mysql://localhost:3306/urllist?useSSL=false";
@@ -27,13 +29,13 @@ public class UrlThread extends Thread{
         try{
             URL hp = new URL(url);
             HttpURLConnection hpCon = (HttpURLConnection) hp.openConnection();
-            sc.setStat(this.id, hpCon.getResponseCode());
+            statlist.add(new Statlist(id, hpCon.getResponseCode()));
 //            Connection con = DriverManager.getConnection(urldb, login, password);
 //            Statement st = con.createStatement();
 //            st.executeUpdate("UPDATE urllistg SET date = '" + date + "', status = " + hpCon.getResponseCode() + " WHERE id = " + id);
 //            st.close();
         }catch (UnknownHostException uhe){
-            sc.setStat(this.id, 600);
+            statlist.add(new Statlist(id, 600));
         }catch(Exception e){
             System.out.println(e);
         }finally{

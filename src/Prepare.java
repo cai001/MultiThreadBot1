@@ -13,7 +13,7 @@ public class Prepare {
         rs2.next();
         int maxid = rs.getInt(1);
         st.close();
-        
+
         return maxid;
     }
 }
