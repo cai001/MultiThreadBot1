@@ -2,7 +2,8 @@ import java.net.*;
 import java.util.ArrayList;
 import java.sql.*;
 
-public class UpdThread extends Thread{
+public class UpdThread implements Runnable{
+    Thread thread;
     private String name;
     private int stat;
     private int id;
@@ -10,14 +11,15 @@ public class UpdThread extends Thread{
     private String date;
     private ArrayList<Statlist> statlist;
     UpdThread(String name, int num, String date, ArrayList<Statlist> statlist){
-        super(name);
+//        super(name);
         this.name = name;
         this.stat = statlist.get(0).stat;
         this.id = statlist.get(0).id;
+        statlist.remove(0);
         this.num = num;
         this.date = date;
-        statlist.remove(0);
-        start();
+        thread = new Thread(this);
+//        start();
     }
     private String urldb = "jdbc:mysql://localhost:3306/urllist?useSSL=false";
     private String login = "mysql";
