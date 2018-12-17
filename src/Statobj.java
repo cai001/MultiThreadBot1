@@ -1,7 +1,7 @@
-public class Statlist {
+public class Statobj {
     public int id;
     public int stat;
-    Statlist(int id, int stat){
+    Statobj(int id, int stat){
         this.id = id;
         this.stat = stat;
     }

@@ -1,6 +1,4 @@
-import java.net.*;
 import java.sql.*;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class SelThread extends Thread{
@@ -8,19 +6,19 @@ public class SelThread extends Thread{
     private String date;
     private int id;
     private int num;
-    ArrayList<Urllist> urllist;
+    ArrayList<Urlobj> urlobj;
     Connection con;
     private StatCont sc;
-    SelThread(String name, int num, String date, ArrayList<Urllist> urllist, Connection con){
+    SelThread(String name, int num, String date, ArrayList<Urlobj> urlobj, Connection con){
         super(name);
         this.name = name;
         this.date = date;
         this.num = num;
-        this.urllist = urllist;
+        this.urlobj = urlobj;
         this.con = con;
         start();
     }
-//    private String urldb = "jdbc:mysql://localhost:3306/urllist?useSSL=false";
+//    private String urldb = "jdbc:mysql://localhost:3306/urlobj?useSSL=false";
 //    private String login = "mysql";
 //    private String password = "mysql";
 //    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
@@ -34,7 +32,7 @@ public class SelThread extends Thread{
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM urllistg WHERE date < '" + date + "' or date is null");
             while (rs.next()){
-                urllist.add(new Urllist(rs.getInt("id"), rs.getString("url")));
+                urlobj.add(new Urlobj(rs.getInt("id"), rs.getString("url")));
             }
             st.close();
         }catch(Exception e){

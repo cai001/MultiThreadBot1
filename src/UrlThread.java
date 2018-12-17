@@ -1,6 +1,4 @@
 import java.net.*;
-import java.sql.*;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class UrlThread implements Runnable{
@@ -9,22 +7,22 @@ public class UrlThread implements Runnable{
     private String url;
     private int id;
     private int num;
-    private ArrayList<Urllist> urllist;
-    private ArrayList<Statlist> statlist;
+    private UrlList urlobj;
+    private StatList statobj;
     private ArrayList<String> alstr;
-    UrlThread(String name, int num, ArrayList<Urllist> urllist, ArrayList<Statlist> statlist, ArrayList<String> alstr){
+    UrlThread(String name, int num, UrlList urlobj, StatList statobj, ArrayList<String> alstr){
 //        super(name);
         this.name = name;
-        this.url = urllist.get(0).url;
-        this.id = urllist.get(0).id;
-        urllist.remove(0);
+        this.url = urlobj.get(0).url;
+        this.id = urlobj.get(0).id;
+        urlobj.remove(0);
         this.num = num;
-        this.statlist = statlist;
+        this.statobj = statobj;
         this.alstr = alstr;
         thread = new Thread(this);
 //        thread.start();
     }
-//    private String urldb = "jdbc:mysql://localhost:3306/urllist?useSSL=false";
+//    private String urldb = "jdbc:mysql://localhost:3306/urlobj?useSSL=false";
 //    private String login = "mysql";
 //    private String password = "mysql";
 //    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
@@ -34,19 +32,22 @@ public class UrlThread implements Runnable{
         try{
             URL hp = new URL(url);
             HttpURLConnection hpCon = (HttpURLConnection) hp.openConnection();
-            statlist.add(new Statlist(id, hpCon.getResponseCode()));
+            statobj.add(new Statobj(id, hpCon.getResponseCode()));
 //            System.out.println("id = " + id + ", stat = " + hpCon.getResponseCode());
 //          Connection con = DriverManager.getConnection(urldb, login, password);
 //          Statement st = con.createStatement();
 //          st.executeUpdate("UPDATE urllistg SET date = '" + date + "', status = " + hpCon.getResponseCode() + " WHERE id = " + id);
 //          st.close();
         }catch (UnknownHostException uhe){
-            statlist.add(new Statlist(id, 600));
+            statobj.add(new Statobj(id, 600));
 //            System.out.println("600");
+        }catch (ConnectException ce){
+            statobj.add(new Statobj(id, 601));
+//            System.out.println("601");
         }catch(Exception e){
             System.out.println(e);
         }finally{
-            alstr.add(" ");
+
         }
 
     }

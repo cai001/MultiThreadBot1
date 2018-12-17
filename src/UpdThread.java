@@ -1,4 +1,3 @@
-import java.net.*;
 import java.util.ArrayList;
 import java.sql.*;
 
@@ -9,26 +8,26 @@ public class UpdThread implements Runnable{
     private int id;
     private int num;
     private String date;
-    private ArrayList<Statlist> statlist;
-    UpdThread(String name, int num, String date, ArrayList<Statlist> statlist){
+    private ArrayList<Statobj> statobj;
+    UpdThread(String name, int num, String date, ArrayList<Statobj> statobj){
 //        super(name);
         this.name = name;
-        this.stat = statlist.get(0).stat;
-        this.id = statlist.get(0).id;
-        statlist.remove(0);
+        this.stat = statobj.get(0).stat;
+        this.id = statobj.get(0).id;
+        statobj.remove(0);
         this.num = num;
         this.date = date;
         thread = new Thread(this);
 //        start();
     }
-    private String urldb = "jdbc:mysql://localhost:3306/urllist?useSSL=false";
+    private String urldb = "jdbc:mysql://localhost:3306/urlobj?useSSL=false";
     private String login = "mysql";
     private String password = "mysql";
     public void run(){
         try{
 //            URL hp = new URL(url);
 //            HttpURLConnection hpCon = (HttpURLConnection) hp.openConnection();
-//            statlist.add(new Statlist(id, hpCon.getResponseCode()));
+//            statobj.add(new Statobj(id, hpCon.getResponseCode()));
             Connection con = DriverManager.getConnection(urldb, login, password);
             Statement st = con.createStatement();
             st.executeUpdate("UPDATE urllistg SET date = '" + date + "', status = " + stat + " WHERE id = " + id);
